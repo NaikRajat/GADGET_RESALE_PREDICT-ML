@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+
+<html lang="en" data-theme="dark">
+
+
+
+<head>
+
+<meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>ResaleIQ v2 – Smart Gadget Resale Estimator</title>
+
+<meta name="description"
+
+content="Get an accurate resale value for your gadget using AI-powered assessment. Brand, model, condition and usage evaluated instantly." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+
+rel="stylesheet" />
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link rel="stylesheet" href="style.css" />
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="bg-orb orb-1"></div>
+
+<div class="bg-orb orb-2"></div>
+
+<div class="bg-orb orb-3"></div>
+
+
+
+<!-- Header -->
+
+<header class="header">
+
+<div class="logo">
+
+<span class="logo-icon">📱</span>
+
+<span class="logo-text">Resale<strong>IQ</strong></span>
+
+</div>
+
+<div class="header-right">
+
+<span class="header-device-summary" id="deviceSummary"></span>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+
+<span id="themeIcon">🌙</span>
+
+</button>
+
+</div>
+
+</header>
+
+
+
+<main class="main">
+
+
+
+<!-- Wizard Container -->
+
+<div class="wizard-container">
+
+
+
+<!-- Step Indicator -->
+
+<div class="step-indicator" id="stepIndicator">
+
+<div class="step-item active" data-step="1">
+
+<div class="step-dot"><span>1</span></div>
+
+<span class="step-label">Device</span>
+
+</div>
+
+<div class="step-line" id="line12"></div>
+
+<div class="step-item" data-step="2">
+
+<div class="step-dot"><span>2</span></div>
+
+<span class="step-label">Details</span>
+
+</div>
+
+<div class="step-line" id="line23"></div>
+
+<div class="step-item" data-step="3">
+
+<div class="step-dot"><span>3</span></div>
+
+<span class="step-label">Condition</span>
+
+</div>
+
+<div class="step-line" id="line34"></div>
+
+<div class="step-item" data-step="4">
+
+<div class="step-dot"><span>4</span></div>
+
+<span class="step-label">Result</span>
+
+</div>
+
+</div>
+
+
+
+<!-- ── STEP 1: Device Selection ── -->
+
+<div class="wizard-step active" id="step1">
+
+<div class="step-header">
+
+<span class="step-tag">Step 1 of 3</span>
+
+<h2 class="step-title">Select Your Device</h2>
+
+<p class="step-sub">Choose your brand, series, and model</p>
+
+</div>
+
+
+
+<div class="section-label">Brand</div>
+
+<div class="brand-grid" id="brandGrid">
+
+<button class="brand-card" data-brand="apple" id="b-apple">
+
+<span class="brand-icon apple-icon">🍎</span>
+
+<span class="brand-name">Apple</span>
+
+</button>
+
+<button class="brand-card" data-brand="samsung" id="b-samsung">
+
+<span class="brand-icon">🌀</span>
+
+<span class="brand-name">Samsung</span>
+
+</button>
+
+<button class="brand-card" data-brand="oneplus" id="b-oneplus">
+
+<span class="brand-icon op-icon">1+</span>
+
+<span class="brand-name">OnePlus</span>
+
+</button>
+
+<button class="brand-card" data-brand="xiaomi" id="b-xiaomi">
+
+<span class="brand-icon mi-icon">Mi</span>
+
+<span class="brand-name">Xiaomi</span>
+
+</button>
+
+<button class="brand-card" data-brand="google" id="b-google">
+
+<span class="brand-icon g-icon">G</span>
+
+<span class="brand-name">Google</span>
+
+</button>
+
+<button class="brand-card" data-brand="realme" id="b-realme">
+
+<span class="brand-icon realme-icon">rl</span>
+
+<span class="brand-name">Realme</span>
+
+</button>
+
+<button class="brand-card" data-brand="vivo" id="b-vivo">
+
+<span class="brand-icon vivo-icon">V</span>
+
+<span class="brand-name">Vivo</span>
+
+</button>
+
+</div>
+
+
+
+<!-- Cascade: Series + Model -->
+
+<div class="cascade-wrap hidden" id="cascadeWrap">
+
+<div class="cascade-loading hidden" id="cascadeLoading">
+
+<span class="cascade-spinner"></span> Loading options…
+
+</div>
+
+<div class="cascade-fields" id="cascadeFields">
+
+<div class="form-group">
+
+<label class="form-label" for="seriesSelect">
+
+<span>📦</span> Series
+
+</label>
+
+<div class="select-wrapper">
+
+<select id="seriesSelect" class="form-select">
+
+<option value="">Select series…</option>
+
+</select>
+
+<span class="select-arrow">▾</span>
+
+</div>
+
+</div>
+
+<div class="form-group hidden" id="modelGroup">
+
+<label class="form-label" for="modelSelect">
+
+<span>📱</span> Model
+
+</label>
+
+<div class="select-wrapper">
+
+<select id="modelSelect" class="form-select">
+
+<option value="">Select model…</option>
+
+</select>
+
+<span class="select-arrow">▾</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- ── STEP 2: Device Details ── -->
+
+<div class="wizard-step hidden" id="step2">
+
+<div class="step-header">
+
+<span class="step-tag">Step 2 of 3</span>
+
+<h2 class="step-title">Device Details</h2>
+
+<p class="step-sub">How long have you used it, and what was the original price?</p>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label class="form-label" for="usageSlider">
+
+<span>📅</span> Usage Duration
+
+<span class="label-badge" id="usageDisplay">12 months</span>
+
+</label>
+
+<input type="range" id="usageSlider" class="form-slider" min="1" max="60" value="12" step="1" />
+
+<div class="slider-labels">
+
+<span>1 month</span>
+
+<span>5 years</span>
+
+</div>
+
+<div class="quick-chips">
+
+<span class="chips-label">Quick:</span>
+
+<button class="chip" data-usage="6">6 mo</button>
+
+<button class="chip" data-usage="12">1 yr</button>
+
+<button class="chip" data-usage="24">2 yr</button>
+
+<button class="chip" data-usage="36">3 yr</button>
+
+<button class="chip" data-usage="48">4 yr</button>
+
+</div>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label class="form-label" for="priceInput">
+
+<span>💰</span> Original Purchase Price (₹)
+
+</label>
+
+<div class="input-wrapper">
+
+<span class="input-prefix">₹</span>
+
+<input type="number" id="priceInput" class="form-input" placeholder="e.g. 75000" min="1000" max="500000" />
+
+</div>
+
+<span class="form-hint">Enter the MRP you paid when buying the device</span>
+
+</div>
+
+
+
+<div class="quick-chips price-chips">
+
+<span class="chips-label">Quick fill:</span>
+
+<button class="chip" data-price="15000">₹15K</button>
+
+<button class="chip" data-price="30000">₹30K</button>
+
+<button class="chip" data-price="50000">₹50K</button>
+
+<button class="chip" data-price="75000">₹75K</button>
+
+<button class="chip" data-price="100000">₹1L</button>
+
+<button class="chip" data-price="150000">₹1.5L</button>
+
+</div>
+
+</div>
+
+
+
+<!-- ── STEP 3: Condition Assessment ── -->
+
+<div class="wizard-step hidden" id="step3">
+
+<div class="step-header">
+
+<span class="step-tag">Step 3 of 3</span>
+
+<h2 class="step-title">Condition Assessment</h2>
+
+<p class="step-sub">Answer 4 quick questions to evaluate your device's market condition</p>
+
+</div>
+
+
+
+<div class="condition-questions">
+
+
+
+<!-- Q1 -->
+
+<div class="cq-card" id="cq1">
+
+<div class="cq-header">
+
+<span class="cq-num">Q1</span>
+
+<p class="cq-text">Does the device have visible scratches?</p>
+
+</div>
+
+<div class="cq-options">
+
+<button class="cq-btn cq-bad" data-q="scratches" data-val="yes">😬 Yes</button>
+
+<button class="cq-btn cq-good" data-q="scratches" data-val="no">✅ No</button>
+
+</div>
+
+</div>
+
+
+
+<!-- Q2 -->
+
+<div class="cq-card" id="cq2">
+
+<div class="cq-header">
+
+<span class="cq-num">Q2</span>
+
+<p class="cq-text">Is the screen damaged or cracked?</p>
+
+</div>
+
+<div class="cq-options">
+
+<button class="cq-btn cq-bad" data-q="screen" data-val="yes">😬 Yes</button>
+
+<button class="cq-btn cq-good" data-q="screen" data-val="no">✅ No</button>
+
+</div>
+
+</div>
+
+
+
+<!-- Q3 -->
+
+<div class="cq-card" id="cq3">
+
+<div class="cq-header">
+
+<span class="cq-num">Q3</span>
+
+<p class="cq-text">Are all physical buttons working properly?</p>
+
+</div>
+
+<div class="cq-options">
+
+<button class="cq-btn cq-good" data-q="buttons" data-val="yes">✅ Yes</button>
+
+<button class="cq-btn cq-bad" data-q="buttons" data-val="no">😬 No</button>
+
+</div>
+
+</div>
+
+
+
+<!-- Q4 -->
+
+<div class="cq-card" id="cq4">
+
+<div class="cq-header">
+
+<span class="cq-num">Q4</span>
+
+<p class="cq-text">What is the battery health condition?</p>
+
+</div>
+
+<div class="cq-options three">
+
+<button class="cq-btn cq-good" data-q="battery" data-val="good">🔋 Good</button>
+
+<button class="cq-btn cq-warn" data-q="battery" data-val="average">⚡ Average</button>
+
+<button class="cq-btn cq-bad" data-q="battery" data-val="poor">🪫 Poor</button>
+
+</div>
+
+</div>
+
+
+
+</div>
+
+
+
+<!-- Score Meter -->
+
+<div class="score-meter" id="scoreMeter">
+
+<div class="score-row">
+
+<span class="score-label">Condition Score</span>
+
+<span class="score-val" id="scoreVal">–</span>
+
+</div>
+
+<div class="score-track">
+
+<div class="score-fill" id="scoreFill"></div>
+
+</div>
+
+<div class="score-badge-row">
+
+<span class="score-badge" id="scoreBadge">Answer the questions above</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- ── STEP 4: Results ── -->
+
+<div class="wizard-step hidden" id="step4">
+
+
+
+<!-- Loading -->
+
+<div class="result-loading" id="resultLoading">
+
+<div class="loading-ring"></div>
+
+<p class="loading-msg">Analyzing market data<span class="dot-blink">...</span></p>
+
+</div>
+
+
+
+<!-- Result Content -->
+
+<div class="result-main hidden" id="resultMain">
+
+
+
+<!-- Hero -->
+
+<div class="result-hero">
+
+<span class="result-badge-pill">Estimated Resale Value</span>
+
+<div class="result-price" id="resultPrice">₹0</div>
+
+<div class="result-device-info" id="resultDeviceInfo">—</div>
+
+<div class="result-note" id="resultNote">Prediction based on historical market trends</div>
+
+</div>
+
+
+
+<!-- Price Breakdown -->
+
+<div class="breakdown-card">
+
+<div class="breakdown-heading">
+
+<span>📊</span> Price Breakdown
+
+</div>
+
+<div class="breakdown-rows" id="breakdownRows"></div>
+
+<div class="breakdown-total">
+
+<span class="bt-label">Final Estimated Value</span>
+
+<span class="bt-value" id="btFinal">₹0</span>
+
+</div>
+
+</div>
+
+
+
+<!-- Chart -->
+
+<div class="chart-card">
+
+<div class="chart-heading">📉 Price Depreciation Over Time</div>
+
+<canvas id="depChart" height="180"></canvas>
+
+</div>
+
+
+
+<!-- Confidence -->
+
+<div class="confidence-section">
+
+<div class="conf-row">
+
+<span>Market Confidence</span>
+
+<span class="conf-pct" id="confPct">–</span>
+
+</div>
+
+<div class="conf-track">
+
+<div class="conf-fill" id="confFill"></div>
+
+</div>
+
+</div>
+
+
+
+<!-- Compare Result (hidden until compare submission) -->
+
+<div class="compare-result hidden" id="compareResult">
+
+<div class="compare-heading">⇄ Device Comparison</div>
+
+<div class="compare-grid">
+
+<div class="compare-card mine" id="cmpCard1">
+
+<div class="cmp-tag">Your Device</div>
+
+<div class="cmp-device" id="cmpDev1">—</div>
+
+<div class="cmp-price" id="cmpP1">₹0</div>
+
+<div class="cmp-ret" id="cmpRet1">–</div>
+
+</div>
+
+<div class="compare-vs">VS</div>
+
+<div class="compare-card" id="cmpCard2">
+
+<div class="cmp-tag">Compare Device</div>
+
+<div class="cmp-device" id="cmpDev2">—</div>
+
+<div class="cmp-price" id="cmpP2">₹0</div>
+
+<div class="cmp-ret" id="cmpRet2">–</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- Actions -->
+
+<div class="result-actions">
+
+<button class="btn-download" id="downloadBtn">📄 Download Report</button>
+
+<button class="btn-outline" id="recalcBtn">← Recalculate</button>
+
+<button class="btn-compare" id="compareBtn">⇄ Compare</button>
+
+<button class="btn-reset" id="resetBtn">↺ New</button>
+
+</div>
+
+
+
+</div>
+
+</div>
+
+
+
+<!-- Wizard Nav -->
+
+<div class="wizard-nav" id="wizardNav">
+
+<button class="btn-back hidden" id="backBtn">← Back</button>
+
+<div class="nav-right">
+
+<button class="btn-next" id="nextBtn">Next →</button>
+
+<button class="btn-predict hidden" id="predictBtn">
+
+✨ Predict Value
+
+<span class="ripple-zone" id="rippleZone"></span>
+
+</button>
+
+</div>
+
+</div>
+
+
+
+</div><!-- /wizard-container -->
+
+
+
+<!-- Compare Modal -->
+
+<div class="modal-overlay hidden" id="compareModal">
+
+<div class="modal-card">
+
+<div class="modal-header">
+
+<h3>⇄ Compare with Another Device</h3>
+
+<button class="modal-close" id="closeModal">✕</button>
+
+</div>
+
+<div class="modal-body">
+
+<div class="form-group">
+
+<label class="form-label">Brand</label>
+
+<div class="select-wrapper">
+
+<select id="cmpBrand" class="form-select">
+
+<option value="">Select brand…</option>
+
+<option value="apple">Apple</option>
+
+<option value="samsung">Samsung</option>
+
+<option value="oneplus">OnePlus</option>
+
+<option value="xiaomi">Xiaomi</option>
+
+<option value="google">Google</option>
+
+<option value="realme">Realme</option>
+
+<option value="vivo">Vivo</option>
+
+</select>
+
+<span class="select-arrow">▾</span>
+
+</div>
+
+</div>
+
+<div class="form-group hidden" id="cmpSeriesGroup">
+
+<label class="form-label">Series</label>
+
+<div class="select-wrapper">
+
+<select id="cmpSeries" class="form-select">
+
+<option value="">Select series…</option>
+
+</select>
+
+<span class="select-arrow">▾</span>
+
+</div>
+
+</div>
+
+<div class="form-group hidden" id="cmpModelGroup">
+
+<label class="form-label">Model</label>
+
+<div class="select-wrapper">
+
+<select id="cmpModel" class="form-select">
+
+<option value="">Select model…</option>
+
+</select>
+
+<span class="select-arrow">▾</span>
+
+</div>
+
+</div>
+
+<div class="form-row">
+
+<div class="form-group">
+
+<label class="form-label">Usage (months)</label>
+
+<div class="input-wrapper">
+
+<input type="number" id="cmpUsage" class="form-input" placeholder="e.g. 18" min="1" max="60"
+
+style="padding-left:16px" />
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">Original Price (₹)</label>
+
+<div class="input-wrapper">
+
+<span class="input-prefix">₹</span>
+
+<input type="number" id="cmpPrice" class="form-input" placeholder="e.g. 60000" min="1000" />
+
+</div>
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">Condition</label>
+
+<div class="select-wrapper">
+
+<select id="cmpCondition" class="form-select">
+
+<option value="">Select condition…</option>
+
+<option value="excellent">Excellent</option>
+
+<option value="good">Good</option>
+
+<option value="fair">Fair</option>
+
+</select>
+
+<span class="select-arrow">▾</span>
+
+</div>
+
+</div>
+
+<button class="btn-predict-solid" id="cmpSubmitBtn">Compare Now →</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+</main>
+
+
+
+<footer class="footer">
+
+<p>© 2026 ResaleIQ v2 &nbsp;·&nbsp; ML Regression Engine &nbsp;·&nbsp; For demonstration purposes</p>
+
+</footer>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script src="script.js"></script>
+
+</body>
+
+
+
+</html>
+
+index.html
+
